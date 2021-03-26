@@ -12,24 +12,24 @@ class movieController {
 
     static async showById(request, response) {
         try {
-			const movieId = +request.params.id;
-			const data = await Movie.findByPk({
+            const movieId = +request.params.id;
+            const data = await Movie.findByPk({
                 where: { id: movieId }
             });
-			response.status(200).json(data);
-		} catch (error) {
-			next(error);
-		}
+            response.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
     }
 
     static async addMovie(request, response, next) {
-        const newData = { 
+        const newData = {
             title: request.body.title,
-            episodes: request.body.episodes, 
-            info_url: request.body.info_url, 
+            episodes: request.body.episodes,
+            info_url: request.body.info_url,
             watch_url: request.body.watch_url
         }
-        try{
+        try {
             const data = await Movie.create(newData);
             const result = {
                 "id": data.id,
@@ -39,28 +39,41 @@ class movieController {
                 "watch_url": data.watch_url
             }
             response.status(201).json(result);
-        }catch(error){
+        } catch (error) {
             next(error);
         }
     }
 
     static async updateMovie(request, response) {
         try {
-			const movieId = +request.params.id;
-			const newData = { 
-                title: request.body.title, 
-                episodes: request.body.episodes, 
-                info_url: request.body.info_url, 
-                watch_url: request.body.watch_url 
+            const movieId = +request.params.id;
+            const newData = {
+                title: request.body.title,
+                episodes: request.body.episodes,
+                info_url: request.body.info_url,
+                watch_url: request.body.watch_url
             }
-			const updateMovie = await Movie.update(newData, { 
-                where: { id: movieId }, 
-                returning: true 
+            const updateMovie = await Movie.update(newData, {
+                where: { id: movieId },
+                returning: true
             })
-			response.status(200).json(updateMovie[1][0]);
-		} catch (error) {
-			next(error);
-		}
+            response.status(200).json(updateMovie[1][0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async deleteMovie(request, response) {
+        try {
+            const movieId = +request.params.id;
+            const deleteMovie = await Movie.destroy({
+                where: { id: movieId },
+                returning: true
+            })
+            response.status(200).json({ msg: "selected movie deleted successfully" })
+        } catch (error) {
+            next(error);
+        }
     }
 }
 
