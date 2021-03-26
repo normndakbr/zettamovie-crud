@@ -43,6 +43,25 @@ class movieController {
             next(error);
         }
     }
+
+    static async updateMovie(request, response) {
+        try {
+			const movieId = +request.params.id;
+			const newData = { 
+                title: request.body.title, 
+                episodes: request.body.episodes, 
+                info_url: request.body.info_url, 
+                watch_url: request.body.watch_url 
+            }
+			const updateMovie = await Movie.update(newData, { 
+                where: { id: movieId }, 
+                returning: true 
+            })
+			response.status(200).json(updateMovie[1][0]);
+		} catch (error) {
+			next(error);
+		}
+    }
 }
 
 module.exports = movieController
