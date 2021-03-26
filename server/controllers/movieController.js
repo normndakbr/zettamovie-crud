@@ -21,6 +21,28 @@ class movieController {
 			next(error);
 		}
     }
+
+    static async addMovie(request, response, next) {
+        const newData = { 
+            title: request.body.title,
+            episodes: request.body.episodes, 
+            info_url: request.body.info_url, 
+            watch_url: request.body.watch_url
+        }
+        try{
+            const data = await Movie.create(newData);
+            const result = {
+                "id": data.id,
+                "title": data.title,
+                "episodes": data.episodes,
+                "info_url": data.info_url,
+                "watch_url": data.watch_url
+            }
+            response.status(201).json(result);
+        }catch(error){
+            next(error);
+        }
+    }
 }
 
 module.exports = movieController
